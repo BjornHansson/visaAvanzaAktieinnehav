@@ -1,7 +1,7 @@
 # visaAvanzaAktieinnehav
 Läser in en nerladdad HTML-fil från en nätbank och visar alla aktieinnehaven i ett cirkeldiagram.
 
-User story: Som användare vill jag kunna se alla mina innehav (från alla mina konton) samtidigt i ett enda diagram, så att jag får en överblick av fördelningen.
+User story: Som användare vill jag kunna se alla mina innehav (från alla mina konton) i diagram, så att jag får en överblick av fördelningen.
 
 ![Screenshot](screenshot.jpg?raw=true "Screenshot")
 

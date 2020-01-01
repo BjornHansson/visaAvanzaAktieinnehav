@@ -1,0 +1,7 @@
+/* This will let you define colors of pie chart slices. But it should probably be randomized since the amount is uncertain */
+.data8.chart-pie { -fx-pie-color: rgb(30, 179, 55); }
+.data9.chart-pie { -fx-pie-color: rgb(70, 250, 232); }
+.data10.chart-pie { -fx-pie-color: rgb(133, 11, 11); }
+.data11.chart-pie { -fx-pie-color: rgb(102, 24, 204); }
+.data12.chart-pie { -fx-pie-color: rgb(100, 149, 237); }
+.data13.chart-pie { -fx-pie-color: rgb(180, 164, 21); }
