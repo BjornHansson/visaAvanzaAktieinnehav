@@ -14,7 +14,7 @@ public class HtmlFile {
     private List<Shareholding> myList = new ArrayList<Shareholding>();
     private final String itemsSelector = ".allocation-item";
     private final String nameSelector = ".u-ellipsis";
-    private final String amountSelector = ".percent";
+    private final String amountSelector = ".value";
 
     public HtmlFile(String filePath) {
         File input = new File(filePath);

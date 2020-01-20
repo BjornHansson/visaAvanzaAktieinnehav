@@ -1,9 +1,11 @@
 # visaAvanzaAktieinnehav
-Läser in en nerladdad HTML-fil från en nätbank och visar alla aktieinnehaven i ett cirkeldiagram.
+Läser in en nerladdad HTML-fil från en nätbank och visar alla aktieinnehaven i diagram.
 
 User story: Som användare vill jag kunna se alla mina innehav (från alla mina konton) i diagram, så att jag får en överblick av fördelningen.
 
-![Screenshot](screenshot.jpg?raw=true "Screenshot")
+![Screenshot](screenshot1.jpg?raw=true "Screenshot")
+
+![Screenshot](screenshot2.jpg?raw=true "Screenshot")
 
 ## Starta
 - Spara ner en fil med innehaven genom att kopiera HTML (via web console) från nätbanken.

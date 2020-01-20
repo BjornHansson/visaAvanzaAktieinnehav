@@ -21,8 +21,9 @@ import javafx.scene.Group;
 
 public class App extends Application {
     private static final String TITLE = "Portfolio";
-    private static final String OPTION_LARGE = "Show the fourteen largest holdings";
-    private static final String OPTION_ALL = "Show all holdings";
+    private static final String OPTION_LARGE = "Fourteen largest holdings";
+    private static final String OPTION_ALL_PIE = "All holdings in pie chart";
+    private static final String OPTION_ALL_BAR = "All holdings in bar chart";
     private static final int DEFAULT_SIZE = 900;
     private static final int MAX_NR = 14;
     private List<Shareholding> shareholdings;
@@ -45,16 +46,34 @@ public class App extends Application {
         stage.setTitle(TITLE);
         scene.getStylesheets().add("styles.css");
 
+        final NumberAxis xAxis = new NumberAxis();
+        final CategoryAxis yAxis = new CategoryAxis();
+        final BarChart<Number, String> barChart = new BarChart<>(xAxis, yAxis);
+        barChart.setTitle(TITLE);
+        barChart.setPrefSize(DEFAULT_SIZE, DEFAULT_SIZE);
+        xAxis.setLabel("Amount");
+        xAxis.setTickLabelRotation(90);
+        yAxis.setLabel("Holding");
+
         // Have several lists to change between depending on options
         ObservableList<PieChart.Data> chartDataAll = FXCollections.observableArrayList();
         ObservableList<PieChart.Data> chartDataLargest = FXCollections.observableArrayList();
 
+        int indexShare = 0;
         for (Shareholding share : this.shareholdings) {
-            chartDataAll.add(new PieChart.Data(share.getLabel(), share.getAmount()));
-        }
-        for (int i = 0; i < MAX_NR; i++) {
-            Shareholding share = this.shareholdings.get(i); // They should already be sorted by size
-            chartDataLargest.add(new PieChart.Data(share.getLabel(), share.getAmount()));
+            String label = share.getLabel();
+            double amount = share.getAmount();
+
+            chartDataAll.add(new PieChart.Data(label, amount));
+            if (indexShare < MAX_NR) {
+                chartDataLargest.add(new PieChart.Data(label, amount));
+            }
+
+            XYChart.Series<Number, String> series = new XYChart.Series<Number, String>();
+            series.setName(share.getLabel());
+            series.getData().add(new XYChart.Data<Number, String>(amount, label));
+            barChart.getData().add(series);
+            indexShare++;
         }
 
         final PieChart chart = new PieChart(chartDataLargest);
@@ -62,28 +81,40 @@ public class App extends Application {
         chart.setPrefSize(DEFAULT_SIZE, DEFAULT_SIZE);
         chart.setLabelLineLength(50);
 
+        final Background bg = new Background(new BackgroundFill(Color.web("#F4F4F4"), CornerRadii.EMPTY, Insets.EMPTY));
+        final VBox vBox = new VBox(8); // spacing = 8
+        vBox.setFillWidth(true);
+        vBox.setBackground(bg);
+
         final ChoiceBox<String> selectBox = new ChoiceBox<>();
-        selectBox.setItems(FXCollections.observableArrayList(OPTION_LARGE, OPTION_ALL));
+        selectBox.setItems(FXCollections.observableArrayList(OPTION_LARGE, OPTION_ALL_PIE, OPTION_ALL_BAR));
         selectBox.setValue(OPTION_LARGE);
+
         selectBox.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                vBox.getChildren().clear(); // Remove all of the elements
+                vBox.getChildren().add(selectBox); // Always add the select box
+                
                 String selectedOption = selectBox.getItems().get((Integer) number2);
-                if (selectedOption.equals(OPTION_ALL)) {
+                switch (selectedOption) {
+                case OPTION_ALL_PIE:
+                    vBox.getChildren().add(chart);
                     chart.setLabelsVisible(false); // Unable to display labels if there are too many
                     chart.setData(chartDataAll);
-                } else {
+                    break;
+                case OPTION_LARGE:
+                    vBox.getChildren().add(chart);
                     chart.setData(chartDataLargest);
                     chart.setLabelsVisible(true);
+                    break;
+                case OPTION_ALL_BAR:
+                    vBox.getChildren().add(barChart);
+                    break;
                 }
-                // TODO Add option for horizontal bar chart
             }
         });
 
-        Background bg = new Background(new BackgroundFill(Color.web("#F4F4F4"), CornerRadii.EMPTY, Insets.EMPTY));
-        VBox vBox = new VBox(8); // spacing = 8
-        vBox.setFillWidth(true);
-        vBox.setBackground(bg);
         vBox.getChildren().add(selectBox);
         vBox.getChildren().add(chart);
 
